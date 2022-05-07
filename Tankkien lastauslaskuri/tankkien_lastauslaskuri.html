@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang=fi>
+    <head>
+    <meta charset="utf-8"/>
+    <title>Tankkilaskuri</title>
+
+    <style>
+        
+        body {
+            margin-left: 30px;
+            margin-top: 30px;
+            background-color: rgb(214, 229, 248);
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            font-size: smaller;
+        }
+
+        input {
+            width: 50px;
+        }
+
+        .lastaustilanne {
+            display: flex;
+            flex-direction: row;
+        }
+
+        .palsta {
+            width: 170px;
+            line-height: 20px;
+        }
+
+        #tulostusalue {
+            height: 30px;
+            color: rgb(122, 48, 5);
+        }
+
+        .kysymykset {
+            width: 300px;
+            float: left;
+        }
+
+    </style>
+    </head>
+    <body>
+    <h1>Tankkien lastauslaskuri</h1>
+
+    <div class="kysymykset">Mistä tankista siirretään (lähtötankin nro): </div>
+        <input type="int" id=from><br/><br/>
+    <div class="kysymykset">Mihin tankkiin siirretään (kohdetankin nro): </div>
+        <input type="int" id=to><br/><br/>
+    <div class="kysymykset">Miten paljon siirretään (tonnia): </div>
+        <input type="int" id=maara><br/><br/>
+
+    <button class="nappula" onclick="laskeSiirto();">Tarkista ja siirrä</button><br/><br/>
+    
+    <div id=tulostusalue></div>   <!-- Tila, jonne ilmoitukset tulostetaan. -->
+
+    <h2>Tankkien lastaustilanne (tonnia)</h2>  <!-- Kunkin tankin lähtötilanne 10000, span id:n mukaan päivittyvä taulukko. -->
+    <div class=lastaustilanne>
+        <div class=palsta>
+            Tankki 1: <span id=1>10000</span><br/>
+            Tankki 2: <span id=2>10000</span><br/>
+            Tankki 3: <span id=3>10000</span><br/>
+            Tankki 4: <span id=4>10000</span><br/>
+            Tankki 5: <span id=5>10000</span><br/>
+            Tankki 6: <span id=6>10000</span><br/>
+            Tankki 7: <span id=7>10000</span><br/>
+            Tankki 8: <span id=8>10000</span><br/>
+            Tankki 9: <span id=9>10000</span><br/>
+            Tankki 10: <span id=10>10000</span><br/>
+        </div>
+        <div class=palsta>
+            Tankki 11: <span id=11>10000</span><br/>
+            Tankki 12: <span id=12>10000</span><br/>
+            Tankki 13: <span id=13>10000</span><br/>
+            Tankki 14: <span id=14>10000</span><br/>
+            Tankki 15: <span id=15>10000</span><br/>
+            Tankki 16: <span id=16>10000</span><br/>
+            Tankki 17: <span id=17>10000</span><br/>
+            Tankki 18: <span id=18>10000</span><br/>
+            Tankki 19: <span id=19>10000</span><br/>
+            Tankki 20: <span id=20>10000</span><br/>
+        </div>
+    </div>
+    
+    <script>
+        "use strict"
+
+        // Luodaan array, jossa on 20 kpl alkioita, joista kunkin sisältö on '10000'.
+        let tankit = new Array(20).fill(10000);
+        
+        // Määritetään muuttujat, joita useampi funktio tarvitsee
+        let lahtoTankki;  
+        let kohdeTankki;
+
+        function laskeSiirto() {
+            lahtoTankki = +document.getElementById("from").value; // Käyttäjän antama arvo sijoitetaan muuttujiin
+            kohdeTankki = +document.getElementById("to").value;
+            let siirto = +document.getElementById("maara").value;
+            let lahtoIndeksi = (document.getElementById("from").value) - 1;    //array-indeksointi lähtee nollasta, muuttujat, joissa kohdennus oikein
+            let kohdeIndeksi = (document.getElementById("to").value) - 1;
+
+            if (tankitOK()) {   // Vain jos tankkinumerot on syötetty oikein, ohjelma jatkuu. 
+
+                // Onko tarpeeksi siirrettävää: lähtötankin suunniteltu öljymäärä, 
+                // jos pienempi kuin 0: virheviesti ja toimenpiteen nollaus
+                if(tankit[lahtoIndeksi] < siirto) {
+                    document.getElementById("tulostusalue").innerHTML = "Lähtötankissa ei riittävästi öljyä. Valitse toinen lähtötankki tai muuta öljymäärää."
+                    document.getElementById("from").value = "";
+                    document.getElementById("to").value = "";
+                    document.getElementById("maara").value = "";
+                
+                }
+                // Onko tarpeeksi tilaa: kohdetankin suunniteltu öljymäärä,
+                // jos isompi kuin 20000: virheviesti ja toimenpiteen nollaus
+                else if(tankit[kohdeIndeksi] + siirto > 20000) {
+                    document.getElementById("tulostusalue").innerHTML = "Kohdetankkiin ei mahdu. Valitse toinen kohdetankki tai muuta öljymäärää."
+                    document.getElementById("from").value = "";
+                    document.getElementById("to").value = "";
+                    document.getElementById("maara").value = "";
+                }
+                // Jos kaikki em. asiat kunnossa, tehdään siirron mukaiset laskut
+                else {
+                    tankit[lahtoIndeksi] = tankit[lahtoIndeksi] - siirto;
+                    tankit[kohdeIndeksi] = tankit[kohdeIndeksi] + siirto;
+                    document.getElementById("tulostusalue").innerHTML = "Siirto onnistui."
+                    document.getElementById(kohdeTankki).innerHTML = tankit[kohdeIndeksi];
+                    document.getElementById(lahtoTankki).innerHTML = tankit[lahtoIndeksi];
+                    document.getElementById("from").value = "";
+                    document.getElementById("to").value = "";
+                    document.getElementById("maara").value = "";
+                }
+            }
+            else {
+            }
+        }
+
+        // Tarkastetaan, että annetut tankkinumerot ovat välillä 1-20. Jos ei, laskuri pyytää käyttäjää korjaamaan eikä laske.
+        
+        function tankitOK() {
+            if(lahtoTankki < 1 || lahtoTankki > 20) {
+                document.getElementById("tulostusalue").innerHTML = "Tankin numero virheellinen. Syötä tankin numero väliltä 1-20."
+                document.getElementById("from").value = "";
+                return false;
+            }
+            if(kohdeTankki < 1 || kohdeTankki > 20) {
+                document.getElementById("tulostusalue").innerHTML = "Tankin numero virheellinen. Syötä tankin numero väliltä 1-20."
+                document.getElementById("to").value = "";
+                return false;
+            }
+            else {
+                return true;
+            }
+        }
+    </script>
+    </body>
+</html>

@@ -1,0 +1,198 @@
+<!-- Tee ohjelma, jolla käyttäjä voi liikuttaa palloa nuolinäppäimillä vaaka ja pystysuoraan. 
+Pallo ei liikku automaattisesti, vaan liikahtaa hieman näppäintä painettaessa.
+
+Palloa ei voi liikuttaa alueen reunan yli.  
+
+Lisää toinen pallo alueen oikeaan alanurkkaan, jota liikutellaan a,w,d ja z 
+-näppäimillä vastaavalla tavalla. Toteuta ohjelmaan myös törmäyksen tunnistus eli 
+pallot menevät omiin nurkiinsa, jos törmäävät. -->
+
+<!DOCTYPE html>
+<html lang=fi>
+<head>
+    <meta charset="utf-8"/>
+    <title>Pallopeli</title>
+    <style>
+        body {
+            background-color: rgb(97, 161, 163);
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            color: cornsilk;
+        }
+
+        #ohjelaatikko {
+            text-align: center;
+            margin-top: 40px;
+            padding-bottom: 20px;
+            line-height: 30px;
+        }
+
+        #pallokentta {
+            width: 800px;
+            height: 500px;
+            margin: auto;
+            border-radius: 10px;
+            position: relative;
+            background-color: #add0d1;
+                opacity: 1;
+                background-image: radial-gradient(#73aeb1 0.9px, #add0d1 0.9px);
+                background-size: 18px 18px;
+        }
+
+        #pallo1 {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background-color: cornsilk;
+            position: absolute;
+            top: 0px;
+            left: 0px; 
+        }
+
+        #pallo2 {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: rgb(190, 157, 24);
+            position: absolute;
+            top: 0px;
+            left: 0px; 
+        }
+    </style>
+</head>
+    
+<body onload="init()">
+    <div id="ohjelaatikko">
+        Liikuta vaaleaa palloa nuolinäppäimillä.<br/>
+        Liikuta tummaa palloa näppäimillä A, W, D ja Z.<br/>
+        <b>Mitä tapahtuu, kun pallot törmäävät?</b>
+    </div>
+    <div id="pallokentta">
+        <div id="pallo1"></div>
+        <div id="pallo2"></div>
+    </div> 
+    
+    <script>
+        "use strict"
+        var p1_suuntaX = 50;    // isompi pallo liikkuu pienemmän matkan per painallus
+        var p1_suuntaY = 50;
+        var p1_x_sijainti = 0;
+        var p1_y_sijainti = 0;
+        var p2_suuntaX = 100;   // pienempi pallo liikkuu isomman matkan per painallus
+        var p2_suuntaY = 100;
+        var p2_x_sijainti = 0;
+        var p2_y_sijainti = 0;
+
+        function init() {
+            let pallo1 = document.getElementById("pallo1"); 
+            let pallo2 = document.getElementById("pallo2"); 
+            pallo1.style.left = 0 + "px";
+            pallo1.style.top = 0 + "px";
+            pallo2.style.left = 700 + "px";
+            pallo2.style.top = 400 + "px";
+            window.addEventListener("keydown",liikutaPalloja);
+        }
+
+        function liikutaPalloja(event) {
+            //pallo1:
+            if (event.keyCode == 37 && parseInt(pallo1.style.left) > 0){ //nuoli vasemmalle
+                p1_x_sijainti = parseInt(pallo1.style.left) - p1_suuntaX;
+                pallo1.style.left = p1_x_sijainti + 'px';
+                if (tarkastaPaallekkaisyys()) {
+                    PalaaAlkuun();
+                }
+			}
+			else if (event.keyCode == 39 && parseInt(pallo1.style.left) < 600){ //nuoli oikealle
+				p1_x_sijainti = parseInt(pallo1.style.left) + p1_suuntaX;
+                pallo1.style.left = p1_x_sijainti + 'px';
+                if (tarkastaPaallekkaisyys()) {
+                    PalaaAlkuun();
+                }
+			}
+			else if (event.keyCode == 38 && parseInt(pallo1.style.top) > 0){ //nuoli ylös
+				p1_y_sijainti = parseInt(pallo1.style.top) - p1_suuntaY;
+                pallo1.style.top = p1_y_sijainti + 'px';
+                if (tarkastaPaallekkaisyys()) {
+                    PalaaAlkuun();
+                }
+			}
+			else if (event.keyCode == 40 && parseInt(pallo1.style.top) < 250){ //nuoli alas
+				p1_y_sijainti = parseInt(pallo1.style.top) + p1_suuntaY;
+                pallo1.style.top = p1_y_sijainti + 'px';
+                if (tarkastaPaallekkaisyys()) {
+                    PalaaAlkuun();
+                }
+			}
+            // pallo2: 
+            else if (event.keyCode == 65 && parseInt(pallo2.style.left) > 0){ //A, vasemmalle
+                p2_x_sijainti = parseInt(pallo2.style.left) - p2_suuntaX;
+                pallo2.style.left = p2_x_sijainti + 'px';
+                if (tarkastaPaallekkaisyys()) {
+                    PalaaAlkuun();
+                }
+            }
+            else if (event.keyCode == 68 && parseInt(pallo2.style.left) < 700){ //D, oikealle
+                p2_x_sijainti = parseInt(pallo2.style.left) + p2_suuntaX;
+                pallo2.style.left = p2_x_sijainti + 'px';
+                if (tarkastaPaallekkaisyys()) {
+                    PalaaAlkuun();
+                }
+            }
+            else if (event.keyCode == 87 && parseInt(pallo2.style.top) > 0){ //W, ylös
+                p2_y_sijainti = parseInt(pallo2.style.top) - p2_suuntaY;
+                pallo2.style.top = p2_y_sijainti + 'px';
+                if (tarkastaPaallekkaisyys()) {
+                    PalaaAlkuun();
+                }
+            }
+            else if (event.keyCode == 90 && parseInt(pallo2.style.top) < 400){ //Z, alas
+                p2_y_sijainti = parseInt(pallo2.style.top) + p2_suuntaY;
+                pallo2.style.top = p2_y_sijainti + 'px';
+                if (tarkastaPaallekkaisyys()) {
+                    PalaaAlkuun();
+                }
+            }
+        }
+
+        // Osuvatko pallot toisiinsa?
+        function tarkastaPaallekkaisyys() {
+            // Pienen pallon puskuriarvot, joiden sisällä iso pallo voi osua.
+            let leftMin = parseInt(pallo2.style.left) - 150;
+            let leftMax = parseInt(pallo2.style.left) + 50;
+            let topMin = parseInt(pallo2.style.top) - 150;
+            let topMax = parseInt(pallo2.style.top) + 50;
+            // Raja-arvojen tulee pysyä pelialueella.
+            if (leftMin < 0) {
+                leftMin = 0
+            }
+            if (leftMax > 600) {
+                leftMax = 600
+            }
+            if (topMin < 0) {
+                topMin = 0
+            }
+            if (topMax > 300) {
+                topMax = 300
+            }
+            // Jos pallot kohtaavat sekä horisontaalisesti että vertikaalisesti => päällekkäisyys true.
+            if (parseInt(pallo1.style.left) >= leftMin && 
+            parseInt(pallo1.style.left) <= leftMax && 
+            parseInt(pallo1.style.top) >= topMin && 
+            parseInt(pallo1.style.top) <= topMax) {
+                return true;
+            }
+            else { 
+                return false
+            }
+        }
+        // Pelin nollaus. Pieni viive antaa silmän havaita, että törmäys on tapahtunut.
+        function PalaaAlkuun() {
+            setTimeout(function () {
+                pallo1.style.left = 0 + "px";
+                pallo1.style.top = 0 + "px";
+                pallo2.style.left = 700 + "px";
+                pallo2.style.top = 400 + "px";
+            }, 50);
+        }           
+    </script>
+</body>
+</html>

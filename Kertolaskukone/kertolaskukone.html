@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="fi">
+  <head>
+    <meta charset="utf-8" />
+    <title>Kertolaskut</title>
+
+    <style>
+      body {
+        width: 600px;
+        margin: auto;
+        font-family: "Courier New", Courier, monospace;
+      }
+
+      #kertolaskunLuvut {
+        width: 210px;
+        height: 60px;
+        padding: 8px;
+        padding-top: 14px;
+        margin-top: 20px;
+        margin-bottom: 40px;
+        font-size: 45px;
+        font-weight: bold;
+        text-align: center;
+        color: rgb(24, 166, 185);
+        background-color: #e6e6e6;
+        border-radius: 2px;
+      }
+
+      #mitenMeni {
+        margin-top: 10px;
+        color: rgb(24, 166, 185);
+        font-weight: bold;
+      }
+
+      .nowrap {
+        white-space: nowrap;
+        display: inline-block;
+      }
+
+      button {
+        width: 150px;
+        padding: 5px;
+        margin-top: 20px;
+        margin-bottom: 15px;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Kertolaskujen harjoitteluohjelma</h2>
+
+    <button onclick="uusiKertolasku()">Aloita uusi peli</button>
+
+    <div id="kertolaskunLuvut"></div>
+
+    Vastauksesi: <input id="kayttajanVastaus" size="12" /> <br /><br />
+    <button type="button" onclick="tarkistaLasku()">Tarkista vastaus</button
+    ><br />
+    <div id="mitenMeni"></div>
+    <br /><br />
+    Kysytty:
+    <div class="nowrap" id="kysytty"></div>
+    <br />
+    Oikeita vastauksia:
+    <div class="nowrap" id="oikeitaVastauksia"></div>
+    <br />
+
+    <script>
+      "use strict";
+
+      // Ensimmäinen funktio arpoo kaksi kokonaislukua väliltä 1 - 10 ja tulostaa lukujen kertolaskun.
+      // Käyttäjä vastaa kertolaskun tuloksella.
+      // Toinen funktio tarkistaa kertolaskun ja antaa palautteen.
+
+      // Globaalit muuttujat, joita useampi funktio tarvitsee:
+
+      let oikeaVastaus;
+      let kysytty = 0;
+      let oikeitaVastauksia = 0;
+
+      // Funktio, joka antaa käyttäjälle uuden laskun kahdella satunnaisesti arvotulla luvulla ja
+      // syöttää muuttujaan oikeaVastaus kertolaskun oikean vastauksen.
+
+      function uusiKertolasku() {
+        let luku1 = Math.floor(Math.random() * 10) + 1;
+        let luku2 = Math.floor(Math.random() * 10) + 1;
+        oikeaVastaus = luku1 * luku2;
+        document.getElementById("kertolaskunLuvut").innerHTML =
+          luku1 + " x " + luku2;
+      }
+
+      // Funktio, joka tarkastaa onko käyttäjän laskutoimitus oikein:
+      // Vertaa käyttäjän antamaa vastausta oikeaan vastaukseen.
+      // Tulostaa sanallisesti menikö tehtävä oikein vai ei.
+      // Laskee montako laskua käyttäjälle on annettu ja montako on mennyt oikein.
+      // Laskua voi yrittää monta kertaa, mutta jokainen yritys lasketaan uudeksi laskuksi.
+      // Tyhjentää vastauskentän ja jos lasku on mennyt oikein, arpoo uuden laskun laskettavaksi.
+
+      function tarkistaLasku() {
+        if (document.getElementById("kayttajanVastaus").value == oikeaVastaus) {
+          document.getElementById("mitenMeni").innerHTML =
+            "Oikea vastaus, hienoa!";
+          kysytty++;
+          document.getElementById("kysytty").innerHTML = kysytty;
+          oikeitaVastauksia++;
+          document.getElementById("oikeitaVastauksia").innerHTML =
+            oikeitaVastauksia;
+          uusiKertolasku();
+          document.getElementById("kayttajanVastaus").value = "";
+        } else {
+          document.getElementById("mitenMeni").innerHTML =
+            "Yritäpä uudestaan...";
+          kysytty++;
+          document.getElementById("kysytty").innerHTML = kysytty;
+          document.getElementById("kayttajanVastaus").value = "";
+        }
+      }
+    </script>
+  </body>
+</html>

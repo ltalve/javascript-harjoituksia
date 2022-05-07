@@ -1,0 +1,190 @@
+<!-- Tee liikennevaloanimaatio, joka simuloi valojen vaihtumista autoille ja 
+jalankulkijoille suojatien kohdalla. Kun autoilijoille palaa punainen, 
+niin jalankulkijoille palaa vihreä ja päinvastoin. Katu on yksisuuntainen, 
+eikä suojatie ole risteyksessä.
+
+Huomaa: Keltainen palaa lyhyemmän ajan kuin muut ja punainen ja 
+keltainen palavat hetken yhtä aikaa. Liikennevalojen pitäisi toimia 
+automaattisesti ja jatkuvasti edestakaisin. -->
+
+<!DOCTYPE html>
+<html lang="fi">
+  <head>
+    <meta charset="utf-8" />
+    <title>Liikennevalot</title>
+    <style>
+      body {
+        background-image: url("./street.jpg");
+        background-size: cover;
+        width: 400px;
+        margin: auto;
+        padding-top: 80px;
+        background-color: rgb(255, 255, 255);
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+        text-align: center;
+      }
+
+      .valot {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+      }
+
+      .valopalkki {
+        width: 160px;
+        padding-top: 20px;
+        padding-bottom: 20px;
+        background-color: rgba(0, 0, 0, 0.918);
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        border-radius: 35px;
+      }
+
+      .valopalkki_jk {
+        width: 160px;
+        height: 240px;
+        padding-top: 20px;
+        padding-bottom: 20px;
+        background-color: rgba(0, 0, 0, 0.918);
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        border-radius: 35px;
+      }
+
+      #pun {
+        width: 100px;
+        height: 100px;
+        margin: 10px;
+        background-color: rgb(238, 64, 64);
+        border-radius: 50%;
+      }
+
+      #kel {
+        width: 100px;
+        height: 100px;
+        margin: 10px;
+        background-color: black;
+        border-radius: 50%;
+      }
+
+      #vih {
+        width: 100px;
+        height: 100px;
+        margin: 10px;
+        background-color: black;
+        border-radius: 50%;
+      }
+
+      #jk_pun {
+        width: 100px;
+        height: 100px;
+        margin: 10px;
+        background-color: rgb(238, 64, 64);
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      #jk_vih {
+        width: 100px;
+        height: 100px;
+        margin: 10px;
+        background-color: black;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+    </style>
+
+    <script>
+      "use strict";
+
+      // Lähtöasetelmassa molemmat valot palavat punaisena.
+      // Käydään valojen vaiheet läpi funktio funktiolta järjestyksessä.
+      // Lopussa kutsutaan ensimmäistä funktiota uudestaan ja luuppi toistuu näin ikuisesti.
+
+      function odotaKaksiSekuntiaJaVaihdaValoa_1() {
+        setTimeout(function () {
+          document.getElementById("kel").style.backgroundColor =
+            "rgb(236, 204, 22)";
+          odotaKaksiSekuntiaJaVaihdaValoa_2();
+        }, 2000);
+      }
+
+      function odotaKaksiSekuntiaJaVaihdaValoa_2() {
+        setTimeout(function () {
+          document.getElementById("pun").style.backgroundColor = "black";
+          document.getElementById("kel").style.backgroundColor = "black";
+          document.getElementById("vih").style.backgroundColor =
+            "rgb(49, 134, 49)";
+          odotaKaksiSekuntiaJaVaihdaValoa_3();
+        }, 2000);
+      }
+
+      function odotaKaksiSekuntiaJaVaihdaValoa_3() {
+        setTimeout(function () {
+          document.getElementById("vih").style.backgroundColor = "black";
+          document.getElementById("kel").style.backgroundColor =
+            "rgb(236, 204, 22)";
+          odotaKaksiSekuntiaJaVaihdaValoa_4();
+        }, 2000);
+      }
+
+      function odotaKaksiSekuntiaJaVaihdaValoa_4() {
+        setTimeout(function () {
+          document.getElementById("kel").style.backgroundColor = "black";
+          document.getElementById("pun").style.backgroundColor =
+            "rgb(238, 64, 64)";
+          odotaKaksiSekuntiaJaVaihdaValoa_5();
+        }, 800);
+      }
+
+      function odotaKaksiSekuntiaJaVaihdaValoa_5() {
+        setTimeout(function () {
+          document.getElementById("jk_pun").style.backgroundColor = "black";
+          document.getElementById("jk_vih").style.backgroundColor =
+            "rgb(49, 134, 49)";
+          odotaKaksiSekuntiaJaVaihdaValoa_6();
+        }, 2000);
+      }
+
+      function odotaKaksiSekuntiaJaVaihdaValoa_6() {
+        setTimeout(function () {
+          document.getElementById("jk_vih").style.backgroundColor = "black";
+          document.getElementById("jk_pun").style.backgroundColor =
+            "rgb(238, 64, 64)";
+          odotaKaksiSekuntiaJaVaihdaValoa_1();
+        }, 2000);
+      }
+    </script>
+  </head>
+
+  <!-- Sivun latautuessa kutsutaan ensimmäinen valonvaihtofunktio. -->
+
+  <body onload="odotaKaksiSekuntiaJaVaihdaValoa_1()">
+    <div class="valot">
+      <div class="valopalkki">
+        <div id="pun"></div>
+        <div id="kel"></div>
+        <div id="vih"></div>
+      </div>
+      <div class="valopalkki_jk">
+        <div id="jk_pun"><img src="stand.png" height="80px" /></div>
+        <div id="jk_vih"><img src="walk.png" height="70px" /></div>
+      </div>
+    </div>
+    <div>
+      <br />
+      <!-- Vähän street ambiencea näin korona-aikaan. Kuin olisi oikealla kadulla! -->
+      <audio autoplay controls loop src="Traffic-noise-sound-effect.mp3">
+        <p>Äänet päälle täyden elämyksen saamiseksi!</p>
+      </audio>
+    </div>
+  </body>
+</html>

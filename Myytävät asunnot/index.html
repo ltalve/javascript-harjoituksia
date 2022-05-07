@@ -1,0 +1,121 @@
+<!-- 
+Toteuta kiinteistönvälittäjälle ohjelma, jolla hän voi lisätä 
+myytäviä asuntoja ja hakea niiden tietoja.
+
+Kunkin asunnon tiedot tallennetaan asunto -nimiseen olioon. 
+Olion ominaisuuksia ovat kohdenumero, katuosoite, postinumero, 
+postitoimipaikka, hinta ja pinta-ala. 
+
+Toteuta ohjelma käyttäen constructoria. Toteuta myös metodi nimeltä 
+laskeNelioHinta() asunnon neliöhinnan laskemista varten. 
+
+Tee ohjelmaan käyttöliittymä, jolla käyttäjä voi lisätä asuntoja. 
+Lisätyt asunto-oliot tallennetaan taulukkoon (array), jonka nimi on asunnot.
+
+Tee ohjelmaan myös hakutoimintoja. Asunnon tiedot pitäsi voida hakea kohdenumerolla.
+Lisäksi asuntoja pitäisi voida hakea myös postitoimipaikan perusteella. 
+
+Ohjelman pitäisi laskea myös haettujen asuntojen neliöhinta ja tulostaa se. 
+-->
+
+<!DOCTYPE html>
+<html lang=fi>
+<head>
+    <meta charset="utf-8"/>
+    <title>Asunnonvälitys</title>
+    <script src="koodit.js"></script>
+    <style>
+        body {
+            margin-left: 30px;
+            margin-top: 30px;
+            background-color: rgb(239, 253, 177);
+            color: rgb(0, 0, 0);
+            font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+            font-size: smaller;
+        }
+
+        input {
+            width: 150px;
+        }
+
+        #tulostusalue_syotto {
+            height: 30px;
+            color: rgb(0, 0, 0);
+        }
+
+        #tulostusalue_haunTulokset {
+            height: 30px;
+            color: rgb(0, 0, 0);
+        }
+
+        .kysymykset {
+            width: 120px;
+            float: left;
+        }
+
+        .nappula {
+            margin-top: 20px;
+            margin-bottom: 30px;
+            padding: 5px;
+            color: rgb(255, 255, 255);
+            background-color: rgb(94, 92, 80);
+            border: 0px;
+            width: 120px;
+            font-size: 14px;
+        }
+
+        .column {
+            float: left;
+            width: 400px;
+        }
+    </style>
+</head>
+
+<body onload="haeTietokannanKoko()">
+    <div class="row">
+        <h1>Myytävät asunnot</h1>
+        <div class="column">
+            <!-- Kysytään käyttäjältä tiedot lisättävästä asunnosta-->
+
+            <h2>Syötä asunnon tiedot tietokantaan</h2> 
+            
+            <br/>
+            <div class="kysymykset">Kohdenumero: </div>
+            <input type="text" id=kohdenumero><br/><br/>
+            <div class="kysymykset">Katuosoite: </div>
+            <input type="text" id=katuosoite><br/><br/>
+            <div class="kysymykset">Postinumero: </div>
+            <input type="text" id=postinumero><br/><br/>
+            <div class="kysymykset">Postitoimipaikka: </div>
+            <input type="text" id=postitoimipaikka><br/><br/>
+            <div class="kysymykset">Hinta: </div>
+            <input type="text" id=hinta><br/><br/>
+            <div class="kysymykset">Pinta-ala: </div>
+            <input type="int" id=pintaAla><br/><br/>
+            
+            <!-- Nappulan painaminen kutsuu funktiota, joka tarkastaa tiedot ja etenee kutsumaan muita funktioita.-->
+            <button class="nappula" onclick="tarkastaSyotetytTiedot();">Lisää asunto</button><br/>
+            
+            <div id=tulostusalue_syotto></div>
+        </div>
+        <div class="column">
+            <!-- Kysytään käyttäjältä hakutiedot-->
+            <h2>Hae asuntoja</h2>
+
+            <br/> 
+            <div class="kysymykset">Kohdenumero: </div>
+            <input type="text" id=hae_kohdenumero><br/><br/>
+            <div class="kysymykset">Postitoimipaikka: </div>
+            <input type="text" id=hae_postitoimipaikka><br/><br/>
+
+            <!-- Nappulan painaminen kutsuu haku-funktiota-->
+            <button class="nappula" onclick="haeAsuntoja();">Hae asuntoja</button>
+
+            <!-- Ennen hakuja tuloskenttä on tyhjä. -->
+            <h3>Hakutulokset:</h3>
+            <div id=tulostusalue_haunTulokset><i>Ei vielä tehtyjä hakuja.</i></div>
+        </div>
+    </div>
+
+</body>
+</html>
