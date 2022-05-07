@@ -1,0 +1,8 @@
+Esimerkkejä opintojaksoilla tekemistäni ensimmäisistä JavaScript-koodipätkistä. 
+Tehtävien fokus on kielen perusrakenteiden opettelussa eikä vielä niinkään clean code -henkisessä koodailussa.
+
+- Kertolaskukone arpoo käyttäjälle kertolaskuja laskettavaksi ja pitää kirjaa oikeiden vastausten määrästä.
+- Myytävien asuntojen rekisteriin voi syöttää myytävän asuntokohteen ja rekisteristä voi tehdä hakuja.
+- Tankkien lastausohjelmalla voi siirtää öljyä tankkien välillä ja ohjelma pitää kirjaa tankeissa olevasta tilasta.
+- Törmäävissä palloissa kaksi palloa liikkuu kentällä käyttäjän näppäinkomentojen mukaan ja palaavat törmätessään alkupisteisiinsä.
+- Vaihtuvat liikennevalot vaihtuvat vuorotellen autoille ja jalankulkijoille.
